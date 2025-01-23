@@ -7,8 +7,8 @@ RUN ls -lh /app/target
 FROM openjdk:17-slim
 RUN apt-get update && apt-get install -y curl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/target/*.jar /app/registerData.jar
+COPY --from=build /app/target/*.jar /app/registerdata-image-new.jar
 
 EXPOSE 8088
 
-ENTRYPOINT ["java", "-jar", "/app/registerData.jar"]
+ENTRYPOINT ["java", "-jar", "/app/registerdata-image-new.jar"]
