@@ -15,18 +15,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Sync GitHub Secrets
-      - name: Install jq and openssl (dependencies for sync script)
+      # Step 2: Install jq and openssl (dependencies for sync script)
+      - name: Install jq and openssl
         run: |
           sudo apt-get update
           sudo apt-get install -y jq openssl
 
+      # Step 3: Make the synchronizer script executable
+      - name: Make synchronizer script executable
+        run: chmod +x ./synchronizer.sh
+
+      # Step 4: Run Sync Secrets Script
       - name: Run Sync Secrets Script
         run: ./synchronizer.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub token for API requests
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 3: Set up JDK 17
+      # Step 5: Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -34,11 +39,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Step 4: Build with Maven
+      # Step 6: Build with Maven
       - name: Build with Maven
         run: mvn clean install -DskipTests
 
-      # Step 5: Build & Push Docker Image
+      # Step 7: Build & Push Docker Image
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
